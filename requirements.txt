@@ -1,7 +1,5 @@
-Flask>=2.0
-python-telegram-bot>=20.0
-python-dotenv>=0.21
-gspread>=6.0
-oauth2client>=4.1
+flask
 gunicorn
-requests
+python-telegram-bot==20.5
+gspread
+oauth2client
