@@ -1,4 +1,30 @@
+# Environment variables
 .env
+
+# Python cache
 __pycache__/
 *.pyc
-credentials.json
+*.pyo
+*.pyd
+
+# Credentials
+credentials/
+
+# Logs
+*.log
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# IDE files (если используешь PyCharm, VSCode и т.д.)
+.idea/
+.vscode/
+
+# MacOS system files
+.DS_Store
+
+# Others
+*.sqlite3
+*.db
