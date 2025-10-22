@@ -2,6 +2,7 @@ import os
 import asyncio
 from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
+from google_sheets import get_sheet
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 bot = Bot(token=TELEGRAM_TOKEN)  # асинхронный бот
@@ -27,19 +28,31 @@ def build_keyboard(options, add_back=False):
         keyboard.append([InlineKeyboardButton("⬅ Назад", callback_data="back")])
     return InlineKeyboardMarkup(keyboard)
 
+# Проверка, авторизован ли пользователь
+async def is_authorized(chat_id):
+    sheet = get_sheet("Users")  # Лист с авторизованными пользователями
+    users = sheet.col_values(1)  # Предположим, chat_id в колонке A
+    return str(chat_id) in users
+
 # Главная функция обработки обновлений
 async def handle_update(update: dict):
     if "message" in update:
         chat_id = update["message"]["chat"]["id"]
         text = update["message"].get("text", "")
         if text == "/start":
-            await send_main_menu(chat_id)
+            if await is_authorized(chat_id):
+                await send_main_menu(chat_id)
+            else:
+                await bot.send_message(chat_id=chat_id, text="❌ У вас нет доступа к боту.")
     elif "callback_query" in update:
         callback = update["callback_query"]
         chat_id = callback["message"]["chat"]["id"]
         data = callback["data"]
         if data == "back":
-            await send_main_menu(chat_id)
+            if await is_authorized(chat_id):
+                await send_main_menu(chat_id)
+            else:
+                await bot.send_message(chat_id=chat_id, text="❌ У вас нет доступа к боту.")
         else:
             await send_submenu(chat_id, data)
 
