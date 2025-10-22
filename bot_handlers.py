@@ -1,10 +1,12 @@
+import os
+import asyncio
 from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.constants import ParseMode
-import os
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
-bot = Bot(token=TELEGRAM_TOKEN)
+bot = Bot(token=TELEGRAM_TOKEN)  # асинхронный бот
 
+# Главное меню
 MAIN_MENU = [
     ["Данные о точке"],
     ["Заказы"],
@@ -25,26 +27,35 @@ def build_keyboard(options, add_back=False):
         keyboard.append([InlineKeyboardButton("⬅ Назад", callback_data="back")])
     return InlineKeyboardMarkup(keyboard)
 
-def handle_update(update: dict):
+# Главная функция обработки обновлений
+async def handle_update(update: dict):
     if "message" in update:
         chat_id = update["message"]["chat"]["id"]
         text = update["message"].get("text", "")
         if text == "/start":
-            send_main_menu(chat_id)
+            await send_main_menu(chat_id)
     elif "callback_query" in update:
         callback = update["callback_query"]
         chat_id = callback["message"]["chat"]["id"]
         data = callback["data"]
         if data == "back":
-            send_main_menu(chat_id)
+            await send_main_menu(chat_id)
         else:
-            send_submenu(chat_id, data)
+            await send_submenu(chat_id, data)
 
-def send_main_menu(chat_id):
-    bot.send_message(chat_id=chat_id, text="Главное меню:", reply_markup=build_keyboard(MAIN_MENU))
+# Отправка главного меню
+async def send_main_menu(chat_id):
+    await bot.send_message(
+        chat_id=chat_id,
+        text="Главное меню:",
+        reply_markup=build_keyboard(MAIN_MENU)
+    )
 
-def send_submenu(chat_id, title):
-    bot.send_message(chat_id=chat_id,
-                     text=f"Вы выбрали: *{title}*",
-                     parse_mode=ParseMode.MARKDOWN,
-                     reply_markup=build_keyboard([], add_back=True))
+# Отправка подменю с кнопкой "Назад"
+async def send_submenu(chat_id, title):
+    await bot.send_message(
+        chat_id=chat_id,
+        text=f"Вы выбрали: *{title}*",
+        parse_mode=ParseMode.MARKDOWN,
+        reply_markup=build_keyboard([], add_back=True)
+    )
