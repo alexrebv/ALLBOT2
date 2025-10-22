@@ -1,5 +1,5 @@
-import requests
 import os
+import requests
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 WEBHOOK_URL = os.environ.get("WEBHOOK_URL")
