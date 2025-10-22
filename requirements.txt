@@ -3,3 +3,4 @@ gunicorn
 python-telegram-bot==20.5
 gspread
 oauth2client
+requests
