@@ -10,5 +10,4 @@ def get_sheet(sheet_name):
              "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_CREDENTIALS_FILE, scope)
     client = gspread.authorize(creds)
-    sheet = client.open_by_key(GOOGLE_SHEET_ID).worksheet(sheet_name)
-    return sheet
+    return client.open_by_key(GOOGLE_SHEET_ID).worksheet(sheet_name)
