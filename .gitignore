@@ -7,8 +7,6 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Credentials
-credentials/
 
 # Logs
 *.log
