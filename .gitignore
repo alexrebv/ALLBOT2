@@ -7,7 +7,6 @@ __pycache__/
 *.pyo
 *.pyd
 
-
 # Logs
 *.log
 
@@ -26,3 +25,6 @@ venv/
 # Others
 *.sqlite3
 *.db
+
+# Google credentials - НЕ игнорируем JSON для Render, загружаем через Environment / Files
+# credentials/
